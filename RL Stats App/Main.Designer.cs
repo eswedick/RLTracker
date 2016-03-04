@@ -33,6 +33,10 @@
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.dgStats = new System.Windows.Forms.DataGridView();
+            this.txtSaveLocation = new System.Windows.Forms.TextBox();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnTo0 = new System.Windows.Forms.Button();
+            this.btn21To0 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgStats)).BeginInit();
             this.SuspendLayout();
             // 
@@ -87,21 +91,66 @@
             this.dgStats.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgStats.Location = new System.Drawing.Point(12, 61);
             this.dgStats.Name = "dgStats";
-            this.dgStats.Size = new System.Drawing.Size(748, 274);
+            this.dgStats.Size = new System.Drawing.Size(748, 226);
             this.dgStats.TabIndex = 6;
+            this.dgStats.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgStats_CellClick);
             // 
-            // Form1
+            // txtSaveLocation
+            // 
+            this.txtSaveLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSaveLocation.Location = new System.Drawing.Point(12, 298);
+            this.txtSaveLocation.Name = "txtSaveLocation";
+            this.txtSaveLocation.Size = new System.Drawing.Size(667, 20);
+            this.txtSaveLocation.TabIndex = 7;
+            // 
+            // btnSave
+            // 
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSave.Location = new System.Drawing.Point(685, 298);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 8;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnTo0
+            // 
+            this.btnTo0.Location = new System.Drawing.Point(685, 35);
+            this.btnTo0.Name = "btnTo0";
+            this.btnTo0.Size = new System.Drawing.Size(75, 23);
+            this.btnTo0.TabIndex = 9;
+            this.btnTo0.Text = "0";
+            this.btnTo0.UseVisualStyleBackColor = true;
+            this.btnTo0.Click += new System.EventHandler(this.btnTo0_Click);
+            // 
+            // btn21To0
+            // 
+            this.btn21To0.Location = new System.Drawing.Point(604, 35);
+            this.btn21To0.Name = "btn21To0";
+            this.btn21To0.Size = new System.Drawing.Size(75, 23);
+            this.btn21To0.TabIndex = 10;
+            this.btn21To0.Text = "21 => 0";
+            this.btn21To0.UseVisualStyleBackColor = true;
+            this.btn21To0.Click += new System.EventHandler(this.btn21To0_Click);
+            // 
+            // Main
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(772, 347);
+            this.ClientSize = new System.Drawing.Size(772, 331);
+            this.Controls.Add(this.btn21To0);
+            this.Controls.Add(this.btnTo0);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.txtSaveLocation);
             this.Controls.Add(this.dgStats);
             this.Controls.Add(this.radioButton3);
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.textBox1);
-            this.Name = "Form1";
+            this.Name = "Main";
             this.Text = "RL Tracker";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
@@ -119,6 +168,10 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.DataGridView dgStats;
+        private System.Windows.Forms.TextBox txtSaveLocation;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnTo0;
+        private System.Windows.Forms.Button btn21To0;
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Tesseract;
+using System.Security.AccessControl;
 
 namespace RL_Stats_App
 {
@@ -20,6 +22,7 @@ namespace RL_Stats_App
         string tessdata;
         DataTable results;
 
+        /// tesseract varirables ///
         const int letterHeight = 49;
 
         const int length = 75;
@@ -49,6 +52,9 @@ namespace RL_Stats_App
         const int p4_3 = 1;
         const int p5_3 = 1;
         const int p6_3 = 1;
+
+        bool Mode21To0 = false;
+        bool ModeTo0 = false;
 
         #region "Dictionary"
         private Dictionary<string, Rect> zones = new Dictionary<string, Rect>(){
@@ -384,6 +390,137 @@ namespace RL_Stats_App
                 {
                     return "";
                 }
+            }
+
+        }
+
+        private void btn21To0_Click(object sender, EventArgs e)
+        {
+            if (Mode21To0)
+            {
+                Mode21To0 = false;
+                btn21To0.BackColor = default(Color);
+            }
+            else
+            {
+                Mode21To0 = true;
+                btn21To0.BackColor = Color.LightBlue;
+            }
+        }
+
+        private void btnTo0_Click(object sender, EventArgs e)
+        {
+            if (ModeTo0)
+            {
+                ModeTo0 = false;
+                btnTo0.BackColor = default(Color);
+            }
+            else
+            {
+                ModeTo0 = true;
+                btnTo0.BackColor = Color.LightBlue;
+            }
+        }
+
+        private void dgStats_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string value = dgStats.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            DataTable data = (DataTable)dgStats.DataSource;
+            int outValue;
+
+            try
+            {
+                if (Mode21To0)
+                {
+                    if (int.TryParse(value, out outValue))
+                    {
+                        data.Rows[e.RowIndex].SetField(e.ColumnIndex, value.Substring(0, value.Length - 2) + value.Substring(value.Length - 2, 2).Replace("21", "0"));
+                    }
+                }
+                else if (ModeTo0)
+                {
+                    if (int.TryParse(value, out outValue) || value == "")
+                    {
+                        data.Rows[e.RowIndex].SetField(e.ColumnIndex, "0");
+                    }
+
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            DataTable data = (DataTable)dgStats.DataSource;
+
+            if (data.Rows.Count == 2)
+            {
+                SaveGame(data, 1);
+            }
+            else if (data.Rows.Count == 4)
+            {
+                SaveGame(data, 2);
+
+            }
+            else
+            {
+                SaveGame(data, 3);
+            }
+            
+        }
+
+        private bool SaveGame(DataTable game, int gametype)
+        {
+            StringBuilder sb = new StringBuilder();
+            string filepath = "";
+
+            try
+            {
+                //get field values
+                foreach (DataRow row in game.Rows)
+                {
+                    IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
+                    sb.AppendLine(string.Join(",", fields));
+                }
+
+                //get save path
+                if (ConfigurationManager.AppSettings["SaveLocation"] == null)
+                {
+                    filepath = Application.StartupPath + "\\SavedGames\\";
+                }
+                else
+                {
+                    filepath = ConfigurationManager.AppSettings["SaveLocation"];
+                }
+
+                //make sure directory exists
+                if (!Directory.Exists(filepath))
+                {
+                    DirectorySecurity securityRules = new DirectorySecurity();
+                    securityRules.AddAccessRule(new FileSystemAccessRule("Users", FileSystemRights.FullControl, AccessControlType.Allow));
+
+                    DirectoryInfo di = Directory.CreateDirectory(filepath, securityRules);
+                }
+
+                //make sure file exists
+                filepath = filepath + "GameData" + gametype.ToString() + ".csv";
+
+                //append game data to file
+                File.AppendAllText(filepath, sb.ToString());
+
+                //update textbox
+                txtSaveLocation.Text = "Successfully saved file: " + filepath;
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
             }
 
         }
